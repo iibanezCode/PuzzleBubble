@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 4973718365835818}
   - component: {fileID: 212728176060050922}
   - component: {fileID: 95360153778214778}
+  - component: {fileID: 114770651402168772}
   m_Layer: 0
   m_Name: PJ
   m_TagString: Untagged
@@ -360,6 +361,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 493e161c1f008a945a3af44532c91c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114770651402168772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1827379346802430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a939fe7e3ca91439d47cc1f1d52342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blower: {fileID: 1622724384171112}
 --- !u!212 &212169859840914124
 SpriteRenderer:
   m_ObjectHideFlags: 1
