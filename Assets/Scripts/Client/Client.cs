@@ -11,32 +11,24 @@ public class Client : MonoBehaviour {
 
     private const int MAX_CONNECTION = 100;
     private int port = 5701;
-
     private int hostId;
     private int webHostId;
-
     private int reliableChannel;
     private int unReliableChannel;
-
     private float connectionTime;
     private int connectionId;
     private bool isConnected;
     private bool isStarted = false;
-
     private bool movido = false;
-
     private byte error;
 
-    //el nombre del usuario
-    public string playerName;
+    private string playerName;
     private int ourClientId;
 
     public Transform jugador1, jugador2;
 
-
     public List<Player> jugadores = new List<Player>();
     public GameObject playerPrefab;
-    public Vector3 _velocidadPelota;
     public float velocidad;
     public GameObject canvas1;
     public GameObject canvas2;
@@ -104,6 +96,7 @@ public class Client : MonoBehaviour {
                         break;
                     case "SHOOT":
                         jugadores.Find(x => x.playerName == splitData[1]).avatar.transform.Find("PJ").GetComponent<Animator>().SetTrigger("BlowTrigger");
+                        jugadores.Find(x => x.playerName == splitData[1]).avatar.GetComponent<Disparo>().Disparar();
                         break;
                     default:
                         ToLog("Mensaje Invalido" + msg);
