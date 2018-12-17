@@ -155,15 +155,34 @@ public class Client : MonoBehaviour {
     }
 
     private void SpawnPlayer(string playerName, int cnnId) {
-        
+
+        GameObject PnlJ1 = canvas2.transform.Find("PnlGame").Find("PnlJ1").gameObject;
+        GameObject PnlJ2 = canvas2.transform.Find("PnlGame").Find("PnlJ2").gameObject;
+
         if (cnnId == ourClientId) {
             canvas1.SetActive(false);
             canvas2.SetActive(true);
 
-            canvas2.transform.Find("PnlGame").Find("PnlJ1").gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width/2);
-            canvas2.transform.Find("PnlGame").Find("PnlJ2").gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width / 2);
+            PnlJ1.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width/2);
+            PnlJ2.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width / 2);
+
+            //preparar los grids
+
+            GameObject HexGridP1 = PnlJ1.transform.Find("HexGridJ1").gameObject;
+            GameObject HexGridP2 = PnlJ2.transform.Find("HexGridJ2").gameObject;
+
+            
+
+            HexGridP1.GetComponent<HexGrid>().PrepareGrid();
+            HexGridP2.GetComponent<HexGrid>().PrepareGrid();
+
+            //HexGridP1.transform.localPosition = new Vector3(0f, -50, 0f);
+            //HexGridP2.transform.localPosition = new Vector3(PnlJ2.GetComponent<RectTransform>().sizeDelta.x, 0f, 0f);
+            //Instanciar bolas
 
         }
+
+
 
         Player p = new Player();
         if (cnnId % 2 != 0) {
