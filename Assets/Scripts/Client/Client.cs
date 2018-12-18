@@ -183,7 +183,7 @@ public class Client : MonoBehaviour {
             HexCell[] cellsP2 = HexGridP2.GetComponent<HexGrid>().Cells;
 
             for (int i = 67; i > (cellsP1.Length - 15); i--) {
-                Debug.Log(i);
+
                 GameObject ball = Instantiate(ballPrefabs[0], cellsP1[i].gameObject.transform);
                 ball.transform.localPosition = Vector3.zero;
                 ball.transform.localRotation = Quaternion.Euler(90, 0, 0);

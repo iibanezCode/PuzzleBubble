@@ -77,7 +77,7 @@ public class Disparo : MonoBehaviour {
             
                 SetupBolas();
                 SetupBolas();
-            SetupBolas();
+                SetupBolas();
 
         }
 

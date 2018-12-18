@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cell
+  - Black
+  - Blue
+  - Green
+  - Ball
+  - Pared
+  - Techo
   layers:
   - Default
   - TransparentFX
