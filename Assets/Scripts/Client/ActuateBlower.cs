@@ -6,8 +6,7 @@ public class ActuateBlower : MonoBehaviour {
 
     public GameObject blower;
 
-	public void blowBlower()
-    {
+    public void blowBlower() {
         blower.GetComponent<Animator>().SetTrigger("Blow");
     }
 }

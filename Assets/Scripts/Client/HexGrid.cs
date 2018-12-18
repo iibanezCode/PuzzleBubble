@@ -11,17 +11,22 @@ public class HexGrid : MonoBehaviour {
 
     HexCell[] cells;
 
-    public void PrepareGrid()
-    {
+    public HexCell[] Cells {
+        get {
+            return cells;
+        }
+
+        set {
+            cells = value;
+        }
+    }
+
+    public void PrepareGrid() {
         cells = new HexCell[height * width];
 
-        for (int z = 0, i = 0; z < height; z++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                if (z % 2 == 1 && x == width-1)
-                {
-                    Debug.Log("z-->" + z + "  x-->" + x);
+        for (int z = 0, i = 0; z < height; z++) {
+            for (int x = 0; x < width; x++) {
+                if (z % 2 == 1 && x == width - 1) {
                     continue;
                 }
                 CreateCell(x, z, i++);
@@ -29,8 +34,7 @@ public class HexGrid : MonoBehaviour {
         }
     }
 
-    void CreateCell(int x, int y, int i)
-    {
+    void CreateCell(int x, int y, int i) {
         Vector3 position;
         position.x = (x + y * 0.5f - y / 2) * (HexMetrics.innerRadius * 2f);
         position.y = y * (HexMetrics.outerRadius * 1.5f);

@@ -436,6 +436,15 @@ MonoBehaviour:
   velocidad: 0
   canvas1: {fileID: 99574457}
   canvas2: {fileID: 1717984421}
+  ballPrefabs:
+  - {fileID: 1352182097790756, guid: 17b2ce2a580629c4fa733ffc94d6b123, type: 2}
+  - {fileID: 1738920839165354, guid: cc25cbd1f8eed584b9c0e0c8c4834066, type: 2}
+  - {fileID: 1691955470881730, guid: 94534ab2ec754ae4d898c57056203f87, type: 2}
+  - {fileID: 1821296392711454, guid: 3c326145fd6c8c943892f5da889363cf, type: 2}
+  - {fileID: 1235060040969764, guid: 61980a1df01b4f9408bfcf524fcd40dd, type: 2}
+  - {fileID: 1752091045060590, guid: 2994bc444a0d9084fab8f1855c117989, type: 2}
+  - {fileID: 1284911647514882, guid: 063939fc2ddcb9046bf6e0a32f9512cc, type: 2}
+  - {fileID: 1227219287786524, guid: e4251e618e624b548abbdf535548fde4, type: 2}
 --- !u!4 &199868118
 Transform:
   m_ObjectHideFlags: 0
@@ -1391,14 +1400,14 @@ RectTransform:
   m_GameObject: {fileID: 1883603635}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.6445174, y: 6.6445174, z: 6.6445174}
+  m_LocalScale: {x: 4.7, y: 4.7, z: 4.7}
   m_Children: []
   m_Father: {fileID: 122763285}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248, y: -177}
+  m_AnchoredPosition: {x: -176, y: -49}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1883603637
