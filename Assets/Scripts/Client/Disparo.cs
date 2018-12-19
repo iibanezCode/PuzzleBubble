@@ -54,6 +54,7 @@ public class Disparo : MonoBehaviour {
             bolas[ballIndex].transform.parent = ballPos;
             bolas[ballIndex].transform.localPosition = Vector3.zero;
             bola = bolas[ballIndex];
+            bola.GetComponent<CircleCollider2D>().enabled = true;
             ballIndex++;
         }
 
@@ -69,15 +70,17 @@ public class Disparo : MonoBehaviour {
 
     public void Disparar() {
         if (ballIndex != 10 && nextBallIndex != 10) {
-            bola.transform.parent = null;
+            if (bola.transform.parent != null) {
+                bola.transform.parent = null;
+            }
             bola.GetComponent<BallMovement>().shoot(ArrowEnd.position - ArrowOrigin.position);
             bola = null;
 
 
-            
-                SetupBolas();
-                SetupBolas();
-                SetupBolas();
+            Invoke("SetupBolas", 1);
+            Invoke("SetupBolas", 1);
+            Invoke("SetupBolas", 1);
+           
 
         }
 

@@ -21,6 +21,7 @@ public class Server : MonoBehaviour {
 
     public GameObject LoggingText;
     private int logCounter = 0;
+    private float time = 0;
 
     private List<ServerClient> clients = new List<ServerClient>();
 
@@ -90,12 +91,32 @@ public class Server : MonoBehaviour {
                     case "SHOOT":
                         Send("SHOOT|"+splitData[1],reliableChannel,clients);
                         break;
+
+                    case "PUNTOS":
+                        Send("PUNTOS|" + splitData[1] + "|" + splitData[2], reliableChannel, clients);
+                        break;
                 }
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 ToLog("Player" + connectionId + " has disconnected");
+                for(int i = 0; i < clients.Count; i++) {
+                    if(clients[i].connectionId == connectionId) {
+                        clients.RemoveAt(i);
+                    }
+                }
                 break;
+        }
+        if (clients.Count >= 2) {
+            int lastTime = (int)time;
+            time += Time.deltaTime;
+        if ((int)time != lastTime) {
+            ToLog((int)time +"");
+            Send("TIME|" + (int)time, reliableChannel, clients);
+        }
+        if((int)time == 60) {
+                Send("FINJUEGO|", reliableChannel, clients);
+            }
         }
     }
     private void OnConnection(int cnnId) {

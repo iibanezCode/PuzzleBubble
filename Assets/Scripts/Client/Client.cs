@@ -32,8 +32,12 @@ public class Client : MonoBehaviour {
     public float velocidad;
     public GameObject canvas1;
     public GameObject canvas2;
+    public GameObject puntosP1;
+    public GameObject puntosP2;
+    public GameObject Timer;
 
     public GameObject[] ballPrefabs;
+    private bool finJuego = false;
 
     public void Awake() {
         Screen.SetResolution(1024, 768, false);
@@ -104,6 +108,22 @@ public class Client : MonoBehaviour {
                         jugadores.Find(x => x.playerName == splitData[1]).avatar.transform.Find("PJ").GetComponent<Animator>().SetTrigger("BlowTrigger");
                         jugadores.Find(x => x.playerName == splitData[1]).avatar.GetComponent<Disparo>().Disparar();
                         break;
+                    case "TIME":
+                        Timer.GetComponent<Text>().text = splitData[1];
+                        break;
+                    case "PUNTOS":
+                        if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[0])) {
+                            int puntos = int.Parse(puntosP1.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
+                            puntosP1.GetComponent<Text>().text = "Puntos:" +puntos;
+                        }else if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[1])) {
+                            int puntos = int.Parse(puntosP2.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
+                            puntosP2.GetComponent<Text>().text = "Puntos:" + puntos;
+                        }
+                        break;
+                    case "FINJUEGO":
+                        finJuego = true;
+                        break;
+
                     default:
                         ToLog("Mensaje Invalido" + msg);
                         break;
@@ -111,21 +131,33 @@ public class Client : MonoBehaviour {
                 }
                 break;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && movido == false) {
-            Send("ARROWLEFT|" + playerName, reliableChannel);
-            movido = true;
-        } else if (Input.GetKeyDown(KeyCode.RightArrow) && movido == false) {
-            Send("ARROWRIGHT|" + playerName, reliableChannel);
-            movido = true;
-        } else if (Input.GetKeyUp(KeyCode.LeftArrow)) {
-            Send("STOPARROW|" + playerName, reliableChannel);
-            movido = false;
-        } else if (Input.GetKeyUp(KeyCode.RightArrow)) {
-            Send("STOPARROW|" + playerName, reliableChannel);
-            movido = false;
-        } else if (Input.GetKeyDown(KeyCode.Space)) {
-            Send("SHOOT|" + playerName, reliableChannel);
+        if (!finJuego) {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && movido == false) {
+                Send("ARROWLEFT|" + playerName, reliableChannel);
+                movido = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) && movido == false) {
+                Send("ARROWRIGHT|" + playerName, reliableChannel);
+                movido = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftArrow)) {
+                Send("STOPARROW|" + playerName, reliableChannel);
+                movido = false;
+            }
+            else if (Input.GetKeyUp(KeyCode.RightArrow)) {
+                Send("STOPARROW|" + playerName, reliableChannel);
+                movido = false;
+            }
+            else if (Input.GetKeyDown(KeyCode.Space)) {
+                Send("SHOOT|" + playerName, reliableChannel);
+            }
+            else if (Input.GetKeyDown(KeyCode.P)) {
+                Send("PUNTOS|" + playerName + "|100", reliableChannel);
+            }
         }
+
+
+
     }
 
     private void OnAskName(string[] data) {

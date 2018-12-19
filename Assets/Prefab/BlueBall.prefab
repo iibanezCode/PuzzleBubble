@@ -27,7 +27,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1737541041632632
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1738920839165354}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -209,8 +209,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c744ad8f8ed8aec4286387030d6e4b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  posDetector: {fileID: 1737541041632632}
-  neighborDetector: {fileID: 1683953257569846}
 --- !u!114 &114872362562862174
 MonoBehaviour:
   m_ObjectHideFlags: 1
