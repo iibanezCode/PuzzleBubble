@@ -30,8 +30,5 @@ public class BallPositionDetector : MonoBehaviour {
         if (other.tag.Equals("Cell")) {
             lastCellPosition = other.transform.position;
         }
-        if(other.name== "ColliderActivator") {
-            transform.parent.gameObject.GetComponent<CircleCollider2D>().enabled = true;
-        }
     }
 }

@@ -24,19 +24,21 @@ public class BallMovement : MonoBehaviour {
         posDetector.SetActive(true);
     }
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Trigger de la bola entra en:");
+        
         if(other.tag == "Ball" || other.tag == "Techo") {
-            Debug.Log("Ha entrado en Bola y techo");
+            
             dir = Vector3.zero;
             if (other.tag == "Ball") {
-                //gameObject.transform.position = posDetector.GetComponent<BallPositionDetector>().LastCellPosition;
+                Debug.Log("Ha entrado en Bola");
+                gameObject.transform.position = posDetector.GetComponent<BallPositionDetector>().LastCellPosition;
+                neighborDetector.SetActive(true);
                 neighborDetector.GetComponent<NeighborDetection>().enabled = true;
                 neighborDetector.GetComponent<NeighborDetection>().CheckNeighbors();
+                GetComponent<Animator>().SetTrigger("Pop");
             }
         }
 
         if(other.tag == "Pared") {
-            Debug.Log("Ha entrado en pared");
             dir = new Vector3(-dir.x, dir.y, dir.z);
         }
     }

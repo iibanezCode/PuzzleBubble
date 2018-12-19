@@ -43,14 +43,12 @@ public class Disparo : MonoBehaviour {
     private void SetupBolas() {
 
         if(nextBallPos.childCount == 0) {
-            Debug.Log("Setupeando nextBall");
             bolas[nextBallIndex].transform.parent = nextBallPos;
             bolas[nextBallIndex].transform.localPosition = Vector3.zero;
             nextBallIndex++;
         }
         
         if (ballPos.childCount == 0) {
-            Debug.Log("Setupeando Ball");
             bolas[ballIndex].transform.parent = ballPos;
             bolas[ballIndex].transform.localPosition = Vector3.zero;
             bola = bolas[ballIndex];
@@ -69,7 +67,7 @@ public class Disparo : MonoBehaviour {
     }
 
     public void Disparar() {
-        if (ballIndex != 10 && nextBallIndex != 10) {
+        if (ballIndex != 10 && nextBallIndex != 10 && bola!= null) {
             if (bola.transform.parent != null) {
                 bola.transform.parent = null;
             }

@@ -700,7 +700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d49b71f09e737f4cadfff76583303e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 114597816153679258, guid: d4270f15f8bc22246ab6d4c7896e90bf,
+  cellPrefab: {fileID: 114507506742215012, guid: 483f15d36390b8a43a79ba8d28b14bd7,
     type: 2}
 --- !u!224 &715645155
 RectTransform:
@@ -1897,7 +1897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d49b71f09e737f4cadfff76583303e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 114597816153679258, guid: d4270f15f8bc22246ab6d4c7896e90bf,
+  cellPrefab: {fileID: 114507506742215012, guid: 483f15d36390b8a43a79ba8d28b14bd7,
     type: 2}
 --- !u!1 &2084178129
 GameObject:

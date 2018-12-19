@@ -218,8 +218,8 @@ public class Client : MonoBehaviour {
 
                 GameObject ball = Instantiate(ballPrefabs[0], cellsP1[i].gameObject.transform);
                 ball.transform.localPosition = Vector3.zero;
-                ball.transform.localRotation = Quaternion.Euler(90, 0, 0);
-                ball.transform.localScale = new Vector3(60, 60, 60);
+                ball.transform.localScale = new Vector3(270, 270, 270);
+                ball.GetComponent<CircleCollider2D>().enabled = true;
             }
         }
         

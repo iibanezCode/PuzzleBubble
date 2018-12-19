@@ -111,7 +111,6 @@ public class Server : MonoBehaviour {
             int lastTime = (int)time;
             time += Time.deltaTime;
         if ((int)time != lastTime) {
-            ToLog((int)time +"");
             Send("TIME|" + (int)time, reliableChannel, clients);
         }
         if((int)time == 60) {

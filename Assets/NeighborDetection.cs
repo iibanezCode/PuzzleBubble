@@ -5,8 +5,9 @@ using UnityEngine;
 public class NeighborDetection : MonoBehaviour {
 
     public void CheckNeighbors() {
-
+        
        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, gameObject.GetComponent<CircleCollider2D>().radius);
+        Debug.Log("CheckingNeghbors" + hitColliders.Length);
         List<GameObject> neighbors = new List<GameObject>();
         int i = 0;
         if(hitColliders == null) {

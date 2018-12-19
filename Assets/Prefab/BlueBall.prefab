@@ -37,13 +37,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4955772297534046}
   - component: {fileID: 61125491701979760}
+  - component: {fileID: 114587336859144854}
   m_Layer: 0
   m_Name: PositionCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1738920839165354
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,6 +208,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c744ad8f8ed8aec4286387030d6e4b1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114587336859144854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1737541041632632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb5cd9bb652a7049968b203d3e6af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114872362562862174
