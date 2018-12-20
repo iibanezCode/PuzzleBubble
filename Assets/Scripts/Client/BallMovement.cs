@@ -6,9 +6,20 @@ public class BallMovement : MonoBehaviour {
 
     private GameObject posDetector;
     private GameObject neighborDetector;
+    public int cnnId;
 
     private Vector3 dir = Vector3.zero;
-    private bool Trigger = false;
+    private bool animated = false;
+
+    public bool Animated {
+        get {
+            return animated;
+        }
+
+        set {
+            animated = value;
+        }
+    }
 
     private void Awake() {
         posDetector = transform.Find("PositionCollider").gameObject;
@@ -26,15 +37,17 @@ public class BallMovement : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         
         if(other.tag == "Ball" || other.tag == "Techo") {
-            
+            gameObject.transform.position = posDetector.GetComponent<BallPositionDetector>().LastCellPosition;
+            neighborDetector.SetActive(true);
             dir = Vector3.zero;
+
             if (other.tag == "Ball") {
-                Debug.Log("Ha entrado en Bola");
-                gameObject.transform.position = posDetector.GetComponent<BallPositionDetector>().LastCellPosition;
-                neighborDetector.SetActive(true);
                 neighborDetector.GetComponent<NeighborDetection>().enabled = true;
                 neighborDetector.GetComponent<NeighborDetection>().CheckNeighbors();
-                GetComponent<Animator>().SetTrigger("Pop");
+                if (!animated) {
+                    GetComponent<Animator>().SetTrigger("Pop");
+                    animated = true;
+                }
             }
         }
 

@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Server : MonoBehaviour {
 
@@ -24,9 +26,10 @@ public class Server : MonoBehaviour {
     private float time = 0;
 
     private List<ServerClient> clients = new List<ServerClient>();
-
+    private string Player1Balls;
+    private string Player2Balls;
     // Use this for initialization
-    void Awake () {
+    void Awake() {
         NetworkTransport.Init();
         ConnectionConfig cc = new ConnectionConfig();
 
@@ -41,10 +44,31 @@ public class Server : MonoBehaviour {
 
         ToLog("Server Started Succesfully");
 
+        GenerateBalls();
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void GenerateBalls() {
+
+        Player1Balls = "";
+        Player2Balls = "";
+
+        for (int i = 0; i < 15; i++) {
+
+            Player1Balls += Random.Range(1, 4) + ".";
+            Player2Balls += Random.Range(1, 4) + ".";
+            Debug.Log(Player1Balls);
+        }
+
+        Player1Balls = Player1Balls.Substring(0, Player1Balls.Length - 1);
+        Player2Balls = Player2Balls.Substring(0, Player2Balls.Length - 1);
+        ToLog(Player1Balls + " --->1");
+        ToLog(Player2Balls + " --->2");
+
+    }
+
+    // Update is called once per frame
+    void Update() {
         if (!isStarted) {
             return;
         }
@@ -89,19 +113,29 @@ public class Server : MonoBehaviour {
                         break;
 
                     case "SHOOT":
-                        Send("SHOOT|"+splitData[1],reliableChannel,clients);
+                        Send("SHOOT|" + splitData[1], reliableChannel, clients);
                         break;
 
                     case "PUNTOS":
                         Send("PUNTOS|" + splitData[1] + "|" + splitData[2], reliableChannel, clients);
+                        break;
+                    case "SCORE":
+                        if (int.Parse(splitData[2]) > int.Parse(splitData[4])) {
+                            Send("WINNER", reliableChannel, 1);
+                            Send("LOSER", reliableChannel, 2);
+
+                        } else {
+                            Send("WINNER", reliableChannel, 2);
+                            Send("LOSER", reliableChannel, 1);
+                        }
                         break;
                 }
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 ToLog("Player" + connectionId + " has disconnected");
-                for(int i = 0; i < clients.Count; i++) {
-                    if(clients[i].connectionId == connectionId) {
+                for (int i = 0; i < clients.Count; i++) {
+                    if (clients[i].connectionId == connectionId) {
                         clients.RemoveAt(i);
                     }
                 }
@@ -110,10 +144,10 @@ public class Server : MonoBehaviour {
         if (clients.Count >= 2) {
             int lastTime = (int)time;
             time += Time.deltaTime;
-        if ((int)time != lastTime) {
-            Send("TIME|" + (int)time, reliableChannel, clients);
-        }
-        if((int)time == 60) {
+            if ((int)time != lastTime) {
+                Send("TIME|" + (int)time, reliableChannel, clients);
+            }
+            if ((int)time == 60) {
                 Send("FINJUEGO|", reliableChannel, clients);
             }
         }
@@ -133,7 +167,8 @@ public class Server : MonoBehaviour {
             msg += sc.playerName + "%" + sc.connectionId + '|';
 
         msg = msg.Trim('|');
-        ToLog("Sent to all clients -> "+msg);
+        ToLog("Sent to all clients -> " + msg);
+        msg +="|" + Player1Balls + "|" + Player2Balls; 
 
         Send(msg, reliableChannel, cnnId);
 
@@ -156,18 +191,22 @@ public class Server : MonoBehaviour {
     private void OnNameIs(int cnnId, string playerName) {
 
         clients.Find(x => x.connectionId == cnnId).playerName = playerName;
-        Send("CNN|" + playerName + '|' + cnnId, reliableChannel, clients);
+        string msg = "";
+        foreach (ServerClient sc in clients) {
+            msg += "|" + sc.playerName + "%" + sc.connectionId;
+        }
+
+        Send("CNN" + msg , reliableChannel, clients);
     }
 
     private void ToLog(string msg) {
         if (logCounter >= 18) {
             LoggingText.GetComponent<Text>().text = msg;
             logCounter = 1;
-        }
-        else {
+        } else {
             LoggingText.GetComponent<Text>().text = LoggingText.GetComponent<Text>().text + "\n" + msg;
             logCounter++;
-        } 
+        }
     }
 }
 

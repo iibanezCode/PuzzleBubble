@@ -37,10 +37,18 @@ public class Client : MonoBehaviour {
     public GameObject Timer;
 
     public GameObject[] ballPrefabs;
+    private string[] player1Balls;
+    private string[] player2Balls;
+
     private bool finJuego = false;
+    private bool Jugador1Instanciado = false;
+    private bool Jugador2Instanciado = false;
+
+    public GameObject WinnerSprite, LoserSprite;
 
     public void Awake() {
         Screen.SetResolution(1024, 768, false);
+        Application.targetFrameRate = 60;
     }
 
     public void Connect() {
@@ -92,12 +100,20 @@ public class Client : MonoBehaviour {
 
                 switch (splitData[0]) {
                     case "ASKNAME":
+                        player1Balls = splitData[splitData.Length - 2].Split('.');
+                        player2Balls = splitData[splitData.Length - 1].Split('.');
                         OnAskName(splitData);
                         break;
 
                     case "CNN":
-                        Debug.Log("dato del cnn " + splitData[1] + " segundo valor " + splitData[2]);
-                        SpawnPlayer(splitData[1], int.Parse(splitData[2]));
+                       // Debug.Log("dato del cnn " + splitData[1] + " segundo valor " + splitData[2]);
+                        //player1Balls = splitData[3].Split('.');
+                        //player2Balls = splitData[4].Split('.');
+                        for (int i = 1; i < splitData.Length; i++) {
+                            string[] players = splitData[i].Split('%');
+                            SpawnPlayer(players[0], int.Parse(players[1]));
+                        }
+                        //SpawnPlayer(splitData[1], int.Parse(splitData[2]));
                         break;
                     case "MOVE":
                         jugadores.Find(x => x.playerName == splitData[1]).avatar.transform.Find("Arrow").GetComponent<MoveArrow>().TurnArrow(int.Parse(splitData[2]));
@@ -114,14 +130,20 @@ public class Client : MonoBehaviour {
                     case "PUNTOS":
                         if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[0])) {
                             int puntos = int.Parse(puntosP1.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
-                            puntosP1.GetComponent<Text>().text = "Puntos:" +puntos;
-                        }else if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[1])) {
+                            puntosP1.GetComponent<Text>().text = "Puntos:" + puntos;
+                        } else if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[1])) {
                             int puntos = int.Parse(puntosP2.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
                             puntosP2.GetComponent<Text>().text = "Puntos:" + puntos;
                         }
                         break;
                     case "FINJUEGO":
                         finJuego = true;
+                        break;
+                    case "WINNER":
+                        WinnerSprite.SetActive(true);
+                        break;
+                    case "LOSER":
+                        LoserSprite.SetActive(true);
                         break;
 
                     default:
@@ -135,25 +157,22 @@ public class Client : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.LeftArrow) && movido == false) {
                 Send("ARROWLEFT|" + playerName, reliableChannel);
                 movido = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow) && movido == false) {
+            } else if (Input.GetKeyDown(KeyCode.RightArrow) && movido == false) {
                 Send("ARROWRIGHT|" + playerName, reliableChannel);
                 movido = true;
-            }
-            else if (Input.GetKeyUp(KeyCode.LeftArrow)) {
+            } else if (Input.GetKeyUp(KeyCode.LeftArrow)) {
                 Send("STOPARROW|" + playerName, reliableChannel);
                 movido = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.RightArrow)) {
+            } else if (Input.GetKeyUp(KeyCode.RightArrow)) {
                 Send("STOPARROW|" + playerName, reliableChannel);
                 movido = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Space)) {
+            } else if (Input.GetKeyDown(KeyCode.Space)) {
                 Send("SHOOT|" + playerName, reliableChannel);
-            }
-            else if (Input.GetKeyDown(KeyCode.P)) {
+            } else if (Input.GetKeyDown(KeyCode.P)) {
                 Send("PUNTOS|" + playerName + "|100", reliableChannel);
             }
+        } else {
+            Send("SCORE|0|" + puntosP1.GetComponent<Text>().text.Split(':')[1] + "|" + "1|" + puntosP2.GetComponent<Text>().text.Split(':')[1], reliableChannel);
         }
 
 
@@ -169,10 +188,10 @@ public class Client : MonoBehaviour {
         Send("NAMEIS|" + playerName, reliableChannel);
         Debug.Log("Entro al ONASKNAME");
         //enviar datos al resto de jugadores
-        for (int i = 2; i < data.Length - 1; i++) {
+       /* for (int i = 2; i < data.Length - 2; i++) {
             string[] d = data[i].Split('%');
             SpawnPlayer(d[0], int.Parse(d[1]));
-        }
+        }*/
     }
 
     private void Send(string message, int channelId) {
@@ -192,57 +211,75 @@ public class Client : MonoBehaviour {
         GameObject PnlJ1 = canvas2.transform.Find("PnlGame").Find("PnlJ1").gameObject;
         GameObject PnlJ2 = canvas2.transform.Find("PnlGame").Find("PnlJ2").gameObject;
 
-        if (cnnId == ourClientId) {
+       // if (cnnId == ourClientId) {
             canvas1.SetActive(false);
             canvas2.SetActive(true);
 
             PnlJ1.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width / 2);
             PnlJ2.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width / 2);
 
-            //preparar los grids
+       // }
+
+        Player p = new Player();
+        if (cnnId % 2 != 0 && !Jugador1Instanciado) {
+
+            p.avatar = Instantiate(playerPrefab, jugador1.position, Quaternion.identity);
+            p.avatar.transform.parent = jugador1;
+            p.avatar.GetComponent<Disparo>().InitializeBalls(player1Balls, p.connectId);
 
             GameObject HexGridP1 = PnlJ1.transform.Find("HexGridJ1").gameObject;
-            GameObject HexGridP2 = PnlJ2.transform.Find("HexGridJ2").gameObject;
-
-
-
             HexGridP1.GetComponent<HexGrid>().PrepareGrid();
-            HexGridP2.GetComponent<HexGrid>().PrepareGrid();
-
-
-            //Instanciar bolas
             HexCell[] cellsP1 = HexGridP1.GetComponent<HexGrid>().Cells;
-            HexCell[] cellsP2 = HexGridP2.GetComponent<HexGrid>().Cells;
 
             for (int i = 67; i > (cellsP1.Length - 15); i--) {
 
-                GameObject ball = Instantiate(ballPrefabs[0], cellsP1[i].gameObject.transform);
+                GameObject ball = Instantiate(ballPrefabs[int.Parse(player1Balls[67 - i])], cellsP1[i].gameObject.transform);
                 ball.transform.localPosition = Vector3.zero;
                 ball.transform.localScale = new Vector3(270, 270, 270);
                 ball.GetComponent<CircleCollider2D>().enabled = true;
             }
-        }
-        
-        Player p = new Player();
-        if (cnnId % 2 != 0) {
-            p.avatar = Instantiate(playerPrefab, jugador1.position, Quaternion.identity);
-            p.avatar.transform.parent = jugador1;
-        } else {
+            p.avatar.transform.localPosition = new Vector3(0, 0, 0);
+            p.avatar.transform.localScale = new Vector3(270, 270, 1);
+            p.playerName = playerName;
+            p.connectId = cnnId;
+            p.dirArrow = new Vector3(0, 0, 0);
+            jugadores.Add(p);
+            Jugador1Instanciado = true;
+
+
+        } else if (cnnId % 2 == 0 && !Jugador2Instanciado) {
+
             p.avatar = Instantiate(playerPrefab, jugador2.position, Quaternion.identity);
             p.avatar.transform.parent = jugador2;
+            p.avatar.GetComponent<Disparo>().InitializeBalls(player2Balls, p.connectId);
+
+            GameObject HexGridP2 = PnlJ2.transform.Find("HexGridJ2").gameObject;
+            HexGridP2.GetComponent<HexGrid>().PrepareGrid();
+            HexCell[] cellsP2 = HexGridP2.GetComponent<HexGrid>().Cells;
+
+            for (int i = 67; i > (cellsP2.Length - 15); i--) {
+
+                GameObject ball2 = Instantiate(ballPrefabs[int.Parse(player2Balls[67 - i])], cellsP2[i].gameObject.transform);
+                ball2.transform.localPosition = Vector3.zero;
+                ball2.transform.localScale = new Vector3(270, 270, 270);
+                ball2.GetComponent<CircleCollider2D>().enabled = true;
+            }
+            p.avatar.transform.localPosition = new Vector3(0, 0, 0);
+            p.avatar.transform.localScale = new Vector3(270, 270, 1);
+            p.playerName = playerName;
+            p.connectId = cnnId;
+            p.dirArrow = new Vector3(0, 0, 0);
+            jugadores.Add(p);
+            Jugador2Instanciado = true;
         }
-
-        p.avatar.transform.localPosition = new Vector3(0, 0, 0);
-        p.avatar.transform.localScale = new Vector3(270, 270, 1);
-        p.playerName = playerName;
-        p.connectId = cnnId;
-        p.dirArrow = new Vector3(0, 0, 0);
-        jugadores.Add(p);
-
+       
     }
 
     public int getClienteId() {
         return connectionId;
+    }
+    public void SendScoredPoints() {
+        Send("PUNTOS|" + playerName + "|100", reliableChannel);
     }
 
     private void ToLog(string msg) {
