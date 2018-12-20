@@ -37,6 +37,7 @@ public class Client : MonoBehaviour {
     public GameObject Timer;
 
     public GameObject[] ballPrefabs;
+    public GameObject coin;
     private string[] player1Balls;
     private string[] player2Balls;
 
@@ -128,10 +129,18 @@ public class Client : MonoBehaviour {
                         Timer.GetComponent<Text>().text = splitData[1];
                         break;
                     case "PUNTOS":
-                        if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[0])) {
+                        /* if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[0])) {
+                             int puntos = int.Parse(puntosP1.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
+                             puntosP1.GetComponent<Text>().text = "Puntos:" + puntos;
+                         } else if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[1])) {
+                             int puntos = int.Parse(puntosP2.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
+                             puntosP2.GetComponent<Text>().text = "Puntos:" + puntos;
+                         }*/
+                        if (splitData[1].Equals("1")) {
                             int puntos = int.Parse(puntosP1.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
                             puntosP1.GetComponent<Text>().text = "Puntos:" + puntos;
-                        } else if (jugadores.Find(x => x.playerName == splitData[1]).Equals(jugadores[1])) {
+                        }
+                        else {
                             int puntos = int.Parse(puntosP2.GetComponent<Text>().text.Split(':')[1]) + int.Parse(splitData[2]);
                             puntosP2.GetComponent<Text>().text = "Puntos:" + puntos;
                         }
@@ -169,7 +178,7 @@ public class Client : MonoBehaviour {
             } else if (Input.GetKeyDown(KeyCode.Space)) {
                 Send("SHOOT|" + playerName, reliableChannel);
             } else if (Input.GetKeyDown(KeyCode.P)) {
-                Send("PUNTOS|" + playerName + "|100", reliableChannel);
+                Send("PUNTOS|" + connectionId + "|100", reliableChannel);
             }
         } else {
             Send("SCORE|0|" + puntosP1.GetComponent<Text>().text.Split(':')[1] + "|" + "1|" + puntosP2.GetComponent<Text>().text.Split(':')[1], reliableChannel);
@@ -237,7 +246,22 @@ public class Client : MonoBehaviour {
                 ball.transform.localPosition = Vector3.zero;
                 ball.transform.localScale = new Vector3(270, 270, 270);
                 ball.GetComponent<CircleCollider2D>().enabled = true;
+                ball.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
             }
+            ////////////////////////////////////////////////////////////////////////////////////////
+            GameObject mCoin = Instantiate(coin, cellsP1[13].transform);
+            mCoin.transform.localPosition = Vector3.zero;
+            mCoin.transform.localScale = new Vector3(270, 270, 270);
+            mCoin.GetComponent<CircleCollider2D>().enabled = true;
+            mCoin.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
+
+            mCoin = Instantiate(coin, cellsP1[14].transform);
+            mCoin.transform.localPosition = Vector3.zero;
+            mCoin.transform.localScale = new Vector3(270, 270, 270);
+            mCoin.GetComponent<CircleCollider2D>().enabled = true;
+            mCoin.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
+
+            ////////////////////////////////////////////////////////////////////////////////////////
             p.avatar.transform.localPosition = new Vector3(0, 0, 0);
             p.avatar.transform.localScale = new Vector3(270, 270, 1);
             p.playerName = playerName;
@@ -263,7 +287,23 @@ public class Client : MonoBehaviour {
                 ball2.transform.localPosition = Vector3.zero;
                 ball2.transform.localScale = new Vector3(270, 270, 270);
                 ball2.GetComponent<CircleCollider2D>().enabled = true;
+                ball2.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
             }
+            ////////////////////////////////////////////////////////////////////////////////////////
+            GameObject mCoin = Instantiate(coin, cellsP2[13].transform);
+            mCoin.transform.localPosition = Vector3.zero;
+            mCoin.transform.localScale = new Vector3(270, 270, 270);
+            mCoin.GetComponent<CircleCollider2D>().enabled = true;
+            mCoin.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
+
+            mCoin = Instantiate(coin, cellsP2[14].transform);
+            mCoin.transform.localPosition = Vector3.zero;
+            mCoin.transform.localScale = new Vector3(270, 270, 270);
+            mCoin.GetComponent<CircleCollider2D>().enabled = true;
+            mCoin.transform.Find("NeighborDetector").gameObject.GetComponent<NeighborDetection>().enabled = false;
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
             p.avatar.transform.localPosition = new Vector3(0, 0, 0);
             p.avatar.transform.localScale = new Vector3(270, 270, 1);
             p.playerName = playerName;
@@ -279,7 +319,10 @@ public class Client : MonoBehaviour {
         return connectionId;
     }
     public void SendScoredPoints() {
-        Send("PUNTOS|" + playerName + "|100", reliableChannel);
+        Send("PUNTOS|" + connectionId + "|100", reliableChannel);
+    }
+    public void SendScoredPointsDouble() {
+        Send("PUNTOS|" + connectionId + "|200", reliableChannel);
     }
 
     private void ToLog(string msg) {

@@ -215,4 +215,5 @@ public class ServerClient {
     public int connectionId;
     public string playerName;
     public int id;
+    public int puntos;
 }

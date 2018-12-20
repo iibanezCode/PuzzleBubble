@@ -448,6 +448,7 @@ MonoBehaviour:
   - {fileID: 1752091045060590, guid: 2994bc444a0d9084fab8f1855c117989, type: 2}
   - {fileID: 1284911647514882, guid: 063939fc2ddcb9046bf6e0a32f9512cc, type: 2}
   - {fileID: 1227219287786524, guid: e4251e618e624b548abbdf535548fde4, type: 2}
+  coin: {fileID: 1979284738641000, guid: df205b0926041e9498baaea4d564177d, type: 2}
   WinnerSprite: {fileID: 895480904}
   LoserSprite: {fileID: 586485937}
 --- !u!4 &199868118

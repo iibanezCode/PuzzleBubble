@@ -11,6 +11,8 @@ TagManager:
   - Pared
   - Techo
   - Orange
+  - Black
+  - Coin
   layers:
   - Default
   - TransparentFX
